@@ -1,7 +1,9 @@
 import express, { NextFunction } from "express";
 import userRoute from "./routes/user.js";
 import mongoose, { Error } from "mongoose";
+import productroute from "./routes/product .js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import NodeCache from "node-cache";
 
 // Connect to MongoDB
 mongoose
@@ -14,14 +16,16 @@ mongoose
   });
 
 const PORT = 3000;
-
+export const myCache = new NodeCache();
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-app.use(errorHandler);
-
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/product", productroute);
+app.use("/upload", express.static("uploads"));
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server   is running on port ${PORT}`);

@@ -1,25 +1,60 @@
 import { User } from "../models/user.js";
-export const newUser = async (req, res, next) => {
-    try {
-        const { name, email, gender, _id, dob, photo, role } = req.body;
-        const user = await User.create({
+import { tryCatch } from "../middlewares/errorHandler.js";
+import ErrorHandler from "../types/utility.js";
+export const newUser = tryCatch(async (req, res, next) => {
+    const { name, email, gender, _id, dob, photo } = req.body;
+    if (!_id || !gender || !dob || !email || !photo || !name) {
+        return next(new ErrorHandler("please fill the all information first", 400));
+    }
+    let user = await User.findById(_id);
+    if (!user) {
+        user = await User.create({
             name,
             email,
             gender,
             _id,
             dob,
             photo,
-            role,
         });
         return res.status(200).json({
             success: true,
-            message: `Welcome ${user.name}`,
+            message: `Account Created  ${user.name}`,
         });
     }
-    catch (error) {
-        return res.status(401).json({
+    else {
+        res.status(200).json({
             success: false,
-            message: "Unable to create Account",
+            message: `${user.name} already exist`,
         });
     }
-};
+});
+export const getAllUser = tryCatch(async (req, res, next) => {
+    const allUser = await User.find({});
+    return res.status(200).json({
+        success: true,
+        allUser,
+    });
+});
+export const getUser = tryCatch(async (req, res, next) => {
+    const id = req.params.id;
+    const getUser = await User.findById(id);
+    if (!getUser) {
+        return next(new ErrorHandler("No user found with this id ", 400));
+    }
+    return res.status(200).json({
+        success: true,
+        getUser,
+    });
+});
+export const deleteUser = tryCatch(async (req, res, next) => {
+    const id = req.params.id;
+    const userToDelete = await User.findById(id);
+    if (!userToDelete) {
+        return next(new ErrorHandler("No user found with this id ", 400));
+    }
+    await userToDelete.deleteOne();
+    return res.status(200).json({
+        success: true,
+        message: `${userToDelete.name} your account has been deleted`,
+    });
+});
