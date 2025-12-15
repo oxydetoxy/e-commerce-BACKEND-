@@ -21,7 +21,7 @@ app.get("/admin-products", getAdminProducts);
 app
   .route("/:id")
   .get(getSingleProduct)
-  .put(updateProduct)
+  .put(singleUpload, updateProduct)
   .delete(deleteProduct);
 
 export default app;

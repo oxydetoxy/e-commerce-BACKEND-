@@ -6,3 +6,9 @@ class ErrorHandler extends Error {
 }
 
 export default ErrorHandler;
+
+export interface InavlidateTypes {
+  product?: boolean;
+  order?: boolean;
+  admin?: boolean;
+}
