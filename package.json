@@ -13,10 +13,12 @@
     "dev": "nodemon dist/app.js"
   },
   "dependencies": {
+    "@types/morgan": "^1.9.10",
     "@types/uuid": "^10.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongoose": "^8.19.2",
+    "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "node-cache": "^5.1.2",
     "typescript": "^5.9.3",

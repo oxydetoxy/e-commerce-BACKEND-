@@ -2,8 +2,10 @@ import express, { NextFunction } from "express";
 import userRoute from "./routes/user.js";
 import mongoose, { Error } from "mongoose";
 import productroute from "./routes/product .js";
+import orderroute from "./routes/orders.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import NodeCache from "node-cache";
+import morgan from "morgan";
 
 // Connect to MongoDB
 mongoose
@@ -21,8 +23,10 @@ const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(morgan("dev"));
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productroute);
+app.use("api/v1/order", orderroute);
 app.use("/upload", express.static("uploads"));
 
 app.use(errorHandler);

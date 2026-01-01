@@ -2,8 +2,10 @@ import express from "express";
 import userRoute from "./routes/user.js";
 import mongoose from "mongoose";
 import productroute from "./routes/product .js";
+import orderroute from "./routes/orders.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import NodeCache from "node-cache";
+import morgan from "morgan";
 // Connect to MongoDB
 mongoose
     .connect("mongodb://127.0.0.1:27017/ecommerce")
@@ -18,8 +20,10 @@ export const myCache = new NodeCache();
 const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(morgan("dev"));
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productroute);
+app.use("api/v1/order", orderroute);
 app.use("/upload", express.static("uploads"));
 app.use(errorHandler);
 app.listen(PORT, () => {
